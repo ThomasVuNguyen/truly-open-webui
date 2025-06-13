@@ -1,0 +1,48 @@
+FROM python:3.11-slim
+
+ARG UID=1000
+ARG GID=1000
+ARG USE_EMBEDDING_MODEL="BAAI/bge-small-en-v1.5"
+
+ENV USE_CUDA_DOCKER=false
+ENV USE_OLLAMA_DOCKER=false
+ENV USE_EMBEDDING_MODEL=${USE_EMBEDDING_MODEL}
+ENV DOCKER=true
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    gcc \
+    g++ \
+    python3-dev \
+    git \
+    jq \
+    netcat-traditional && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create user
+RUN groupadd -g $GID -o webui && \
+    useradd -m -u $UID -g $GID -o -s /bin/bash webui
+
+# Set up app directory
+WORKDIR /app
+COPY --chown=$UID:$GID . /app/
+COPY --chown=$UID:$GID cloudrun-start.sh /app/backend/start.sh
+
+# Install Python dependencies
+WORKDIR /app/backend
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set proper permissions
+RUN chown -R $UID:$GID /app
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
+  CMD curl --silent --fail http://localhost:${PORT:-8080}/health || exit 1
+
+USER $UID:$GID
+
+CMD [ "bash", "start.sh" ]

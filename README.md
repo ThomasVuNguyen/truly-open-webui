@@ -1,28 +1,9 @@
-# Open WebUI 👋
+# Truly Open WebUI 👋
 
-![GitHub stars](https://img.shields.io/github/stars/open-webui/open-webui?style=social)
-![GitHub forks](https://img.shields.io/github/forks/open-webui/open-webui?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/open-webui/open-webui?style=social)
-![GitHub repo size](https://img.shields.io/github/repo-size/open-webui/open-webui)
-![GitHub language count](https://img.shields.io/github/languages/count/open-webui/open-webui)
-![GitHub top language](https://img.shields.io/github/languages/top/open-webui/open-webui)
-![GitHub last commit](https://img.shields.io/github/last-commit/open-webui/open-webui?color=red)
-![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Follama-webui%2Follama-wbui&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)
-[![Discord](https://img.shields.io/badge/Discord-Open_WebUI-blue?logo=discord&logoColor=white)](https://discord.gg/5rJgQTnV4s)
-[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/tjbck)
+- OpenWebUI, except truly open + customizable
 
-**Open WebUI is an [extensible](https://docs.openwebui.com/features/plugin/), feature-rich, and user-friendly self-hosted AI platform designed to operate entirely offline.** It supports various LLM runners like **Ollama** and **OpenAI-compatible APIs**, with **built-in inference engine** for RAG, making it a **powerful AI deployment solution**.
 
-![Open WebUI Demo](./demo.gif)
-
-> [!TIP]  
-> **Looking for an [Enterprise Plan](https://docs.openwebui.com/enterprise)?** – **[Speak with Our Sales Team Today!](mailto:sales@openwebui.com)**
->
-> Get **enhanced capabilities**, including **custom theming and branding**, **Service Level Agreement (SLA) support**, **Long-Term Support (LTS) versions**, and **more!**
-
-For more information, be sure to check out our [Open WebUI Documentation](https://docs.openwebui.com/).
-
-## Key Features of Open WebUI ⭐
+## Key Features
 
 - 🚀 **Effortless Setup**: Install seamlessly using Docker or Kubernetes (kubectl, kustomize or helm) for a hassle-free experience with support for both `:ollama` and `:cuda` tagged images.
 
@@ -62,31 +43,9 @@ For more information, be sure to check out our [Open WebUI Documentation](https:
 
 Want to learn more about Open WebUI's features? Check out our [Open WebUI documentation](https://docs.openwebui.com/features) for a comprehensive overview!
 
-## 🔗 Also Check Out Open WebUI Community!
-
-Don't forget to explore our sibling project, [Open WebUI Community](https://openwebui.com/), where you can discover, download, and explore customized Modelfiles. Open WebUI Community offers a wide range of exciting possibilities for enhancing your chat interactions with Open WebUI! 🚀
-
 ## How to Install 🚀
 
-### Installation via Python pip 🐍
 
-Open WebUI can be installed using pip, the Python package installer. Before proceeding, ensure you're using **Python 3.11** to avoid compatibility issues.
-
-1. **Install Open WebUI**:
-   Open your terminal and run the following command to install Open WebUI:
-
-   ```bash
-   pip install open-webui
-   ```
-
-2. **Running Open WebUI**:
-   After installation, you can start Open WebUI by executing:
-
-   ```bash
-   open-webui serve
-   ```
-
-This will start the Open WebUI server, which you can access at [http://localhost:8080](http://localhost:8080)
 
 ### Quick Start with Docker 🐳
 
@@ -241,6 +200,77 @@ docker pull YOUR_USERNAME/truly-open-webui:latest
 
 These scripts make it easy to customize, deploy, and share your Open WebUI Docker images.
 
+### Deploying to Google Cloud Run 🌐
+# Install Google Cloud SDK (Linux)
+Follow the instructions at:  
+https://cloud.google.com/sdk/docs/install#linux
+
+# Enable required Google Cloud APIs
+gcloud services enable \
+  cloudbuild.googleapis.com \
+  run.googleapis.com \
+  artifactregistry.googleapis.com
+
+### Cloud Run Deployment
+
+**Important:** Truly Open WebUI is resource-intensive and requires specific configuration for successful deployment on Google Cloud Run.
+
+#### Tested Working Configuration
+
+This configuration has been tested and successfully deploys the application:
+
+```bash
+gcloud run deploy truly-open-webui \
+  --image thomasthemaker/truly-open-webui:latest \
+  --platform managed \
+  --region us-central1 \
+  --port 8080 \
+  --memory 4Gi \
+  --cpu 2 \
+  --timeout 600s \
+  --allow-unauthenticated
+```
+
+#### Memory Requirements
+
+The application requires significant memory to start properly:
+
+- **Minimum 4GB memory**: Attempts with 2GB will fail with "Memory limit exceeded" errors
+- **Higher CPU allocation**: 2 CPUs recommended for proper performance
+- **Extended timeout**: 600 seconds timeout allows for complete startup
+
+#### Complete Deployment with All Options
+
+For advanced scenarios, additional options can be configured:
+
+```bash
+gcloud run deploy truly-open-webui \
+  --image thomasthemaker/truly-open-webui:latest \
+  --platform managed \
+  --region us-central1 \
+  --port 8080 \
+  --cpu 2 \
+  --memory 4Gi \
+  --min-instances 0 \
+  --max-instances 10 \
+  --concurrency 80 \
+  --timeout 600s \
+  --service-account SERVICE_ACCOUNT_EMAIL \
+  --set-env-vars="OPENAI_API_KEY=your_key,WEBUI_SECRET_KEY=your_secret,OLLAMA_BASE_URL=your_ollama_url" \
+  --set-cloudsql-instances=INSTANCE_CONNECTION_NAME \
+  --vpc-connector VPC_CONNECTOR_NAME \
+  --ingress all \
+  --allow-unauthenticated
+```
+
+#### Using the deploy-to-cloud-run.sh Script
+
+For convenience, you can use the included deployment script:
+
+```bash
+./deploy-to-cloud-run.sh --project YOUR_PROJECT_ID --memory 4Gi --cpu 2 --timeout 600s
+```
+
 ### Using the Dev Branch 🌙
 
 > [!WARNING]
@@ -260,29 +290,16 @@ If you are running Open WebUI in an offline environment, you can set the `HF_HUB
 export HF_HUB_OFFLINE=1
 ```
 
-## What's Next? 🌟
+## Documentation? 🌟
 
 Discover upcoming features on our roadmap in the [Open WebUI Documentation](https://docs.openwebui.com/roadmap/).
 
 ## License 📜
 
-This project is licensed under the [BSD-3-Clause License](LICENSE) - see the [LICENSE](LICENSE) file for details. 📄
+This project is licensed under the [BSD-3-Clause License](LICENSE) - see the [LICENSE](LICENSE) file for details. 📄 This will never change!
 
 ## Support 💬
 
 If you have any questions, suggestions, or need assistance, please open an issue or join our
 [Open WebUI Discord community](https://discord.gg/5rJgQTnV4s) to connect with us! 🤝
 
-## Star History
-
-<a href="https://star-history.com/#open-webui/open-webui&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=open-webui/open-webui&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=open-webui/open-webui&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=open-webui/open-webui&type=Date" />
-  </picture>
-</a>
-
----
-
-Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪
