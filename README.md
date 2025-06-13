@@ -300,6 +300,23 @@ If you are running Open WebUI in an offline environment, you can set the `HF_HUB
 export HF_HUB_OFFLINE=1
 ```
 
+
+### Persistent data
+- DATABASE_URL: Neon PostgreSQL
+- VECTOR_DB: Qdrant
+- REDIS_URL: Upstash Redis
+- STORAGE_PROVIDER: Google Cloud Storage
+
+DATABASE_URL="postgresql://user:pass@neon.tech:5432/openwebui"
+STORAGE_PROVIDER="gcs"
+GCS_BUCKET_NAME="openwebui-uploads"
+
+VECTOR_DB="pgvector"  # Uses same PostgreSQL database
+# OR
+VECTOR_DB="qdrant"
+QDRANT_URL="https://your-qdrant-instance.com"
+REDIS_URL="redis://default:pass@upstash.redis.com:6379"
+
 ## Documentation? 🌟
 
 Discover upcoming features on our roadmap in the [Open WebUI Documentation](https://docs.openwebui.com/roadmap/).
