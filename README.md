@@ -181,6 +181,66 @@ In the last part of the command, replace `open-webui` with your container name i
 
 Check our Updating Guide available in our [Open WebUI Documentation](https://docs.openwebui.com/getting-started/updating).
 
+### Using Custom Docker Scripts
+
+The repository includes several helpful scripts to simplify building, deploying, and sharing Docker images.
+
+#### Building Custom Images
+
+Use the `build.sh` script to build a custom Docker image with your preferred configuration:
+
+```bash
+# Basic build
+sudo ./build.sh
+
+# Build with CUDA support
+sudo ./build.sh --cuda
+
+# Build with Ollama included
+sudo ./build.sh --ollama
+
+# Using a custom embedding model
+sudo ./build.sh --embedding-model "intfloat/multilingual-e5-base"
+```
+
+Run `./build.sh --help` for all available options.
+
+#### Deploying Images
+
+After building, use `deploy.sh` to run the container:
+
+```bash
+# Deploy with default settings
+sudo ./deploy.sh
+
+# Deploy on a specific port
+sudo ./deploy.sh --port 3000
+
+# Deploy with Ollama networking
+sudo ./deploy.sh --ollama
+```
+
+Run `./deploy.sh --help` to see all options.
+
+#### Pushing to Docker Hub
+
+Share your custom image with the community using the `push-to-docker-hub.sh` script:
+
+```bash
+# Push your image to Docker Hub
+sudo ./push-to-docker-hub.sh --username YOUR_USERNAME
+
+# Push with a specific tag
+sudo ./push-to-docker-hub.sh --username YOUR_USERNAME --tag v1.0
+```
+
+After pushing, anyone can pull your image with:
+```bash
+docker pull YOUR_USERNAME/truly-open-webui:latest
+```
+
+These scripts make it easy to customize, deploy, and share your Open WebUI Docker images.
+
 ### Using the Dev Branch 🌙
 
 > [!WARNING]
