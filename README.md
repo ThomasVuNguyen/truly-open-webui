@@ -228,8 +228,11 @@ gcloud run deploy truly-open-webui \
   --memory 4Gi \
   --cpu 2 \
   --timeout 600s \
+  --set-env-vars="WEBUI_URL=https://YOUR-SERVICE-URL.run.app" \
   --allow-unauthenticated
 ```
+
+> **CRITICAL:** The `WEBUI_URL` environment variable is essential and must be set to your Cloud Run service URL. Without this, the frontend will fail to load JavaScript assets (500 errors). Replace `YOUR-SERVICE-URL.run.app` with your actual service URL provided after deployment.
 
 #### Memory Requirements
 
@@ -256,7 +259,7 @@ gcloud run deploy truly-open-webui \
   --concurrency 80 \
   --timeout 600s \
   --service-account SERVICE_ACCOUNT_EMAIL \
-  --set-env-vars="OPENAI_API_KEY=your_key,WEBUI_SECRET_KEY=your_secret,OLLAMA_BASE_URL=your_ollama_url" \
+  --set-env-vars="WEBUI_URL=https://YOUR-SERVICE-URL.run.app,OPENAI_API_KEY=your_key,WEBUI_SECRET_KEY=your_secret,OLLAMA_BASE_URL=your_ollama_url" \
   --set-cloudsql-instances=INSTANCE_CONNECTION_NAME \
   --vpc-connector VPC_CONNECTOR_NAME \
   --ingress all \
@@ -268,8 +271,15 @@ gcloud run deploy truly-open-webui \
 For convenience, you can use the included deployment script:
 
 ```bash
-./deploy-to-cloud-run.sh --project YOUR_PROJECT_ID --memory 4Gi --cpu 2 --timeout 600s
+./deploy-to-cloud-run.sh \
+  --project YOUR_PROJECT_ID \
+  --memory 4Gi \
+  --cpu 2 \
+  --timeout 600s \
+  --env "WEBUI_URL=https://YOUR-SERVICE-URL.run.app"
 ```
+
+**Note:** After your first deployment, you'll get a service URL. You must then update the `WEBUI_URL` environment variable with this actual service URL and redeploy.
 
 ### Using the Dev Branch 🌙
 
